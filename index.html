@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DeepMotiv: what motivates each person on your team</title>
+<meta name="description" content="For each person on the team, DeepMotiv shows the manager what motivates them, how to act on it today, and when they are struggling.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0b1f3a;
+    --navy-2: #12305a;
+    --blue: #2563eb;
+    --blue-soft: #e8f0fe;
+    --ink: #13213a;
+    --muted: #55637a;
+    --line: #dbe3ef;
+    --bg: #f6f9fd;
+    --amber: #b45309;
+    --amber-soft: #fff4e5;
+    --radius: 14px;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    color: var(--ink);
+    background: #fff;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+  a { color: var(--blue); }
+
+  /* Header */
+  header.top { position: absolute; top: 0; left: 0; right: 0; z-index: 2; }
+  header.top .wrap { display: flex; align-items: center; justify-content: space-between; height: 72px; }
+  .logo { font-weight: 700; font-size: 20px; color: #fff; text-decoration: none; letter-spacing: -0.01em; }
+  .logo span { color: #7fb0ff; }
+  .nav-cta { color: #fff; text-decoration: none; font-weight: 600; font-size: 15px; border: 1px solid rgba(255,255,255,.35); padding: 9px 16px; border-radius: 999px; }
+  .nav-cta:hover { background: rgba(255,255,255,.1); }
+
+  /* Hero */
+  .hero { background: linear-gradient(160deg, var(--navy) 0%, var(--navy-2) 100%); color: #fff; padding: 132px 0 88px; }
+  .hero .wrap { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 56px; align-items: center; }
+  .eyebrow { display: inline-block; font-size: 13px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: #9cc2ff; margin-bottom: 18px; }
+  .hero h1 { font-size: 42px; line-height: 1.15; letter-spacing: -0.02em; margin: 0 0 22px; font-weight: 700; }
+  .hero p.lead { font-size: 18px; color: #c9d7ee; margin: 0 0 32px; max-width: 560px; }
+  .btns { display: flex; gap: 14px; flex-wrap: wrap; }
+  .btn { display: inline-block; padding: 14px 22px; border-radius: 10px; font-weight: 600; font-size: 16px; text-decoration: none; }
+  .btn-primary { background: var(--blue); color: #fff; }
+  .btn-primary:hover { background: #1d4fd8; }
+  .btn-ghost { color: #fff; border: 1px solid rgba(255,255,255,.35); }
+  .btn-ghost:hover { background: rgba(255,255,255,.08); }
+
+  /* Illustration card */
+  .card { background: #fff; color: var(--ink); border-radius: var(--radius); padding: 22px; box-shadow: 0 24px 60px rgba(0,0,0,.35); }
+  .card .tag { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+  .person { display: flex; align-items: center; gap: 12px; margin: 10px 0 16px; }
+  .avatar { width: 42px; height: 42px; border-radius: 50%; background: var(--blue-soft); color: var(--blue); display: grid; place-items: center; font-weight: 700; }
+  .person b { display: block; font-size: 16px; }
+  .person small { color: var(--muted); font-size: 13px; }
+  .block { border-top: 1px solid var(--line); padding: 12px 0; font-size: 14px; }
+  .block .k { font-size: 12px; font-weight: 600; color: var(--muted); margin-bottom: 4px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip { background: var(--blue-soft); color: #1e40af; font-size: 12.5px; font-weight: 500; padding: 4px 10px; border-radius: 999px; }
+  .flag { background: var(--amber-soft); border-radius: 10px; padding: 12px; margin-top: 4px; font-size: 14px; }
+  .flag .k { color: var(--amber); }
+  .illus-note { font-size: 12px; color: #9fb3d1; margin-top: 10px; text-align: center; }
+
+  /* Sections */
+  section { padding: 84px 0; }
+  section.alt { background: var(--bg); }
+  h2 { font-size: 32px; line-height: 1.2; letter-spacing: -0.015em; margin: 0 0 16px; }
+  .section-lead { font-size: 18px; color: var(--muted); max-width: 720px; margin: 0 0 40px; }
+
+  .problem blockquote { margin: 0 0 44px; padding: 0 0 0 22px; border-left: 4px solid var(--blue); font-size: 21px; line-height: 1.5; max-width: 860px; color: var(--ink); }
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .stat { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 24px; }
+  .stat .n { font-size: 36px; font-weight: 700; color: var(--blue); letter-spacing: -0.02em; }
+  .stat p { margin: 6px 0 10px; font-size: 15.5px; }
+  .stat small { color: var(--muted); font-size: 12.5px; }
+
+  .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+  .feature { border: 1px solid var(--line); border-radius: var(--radius); padding: 26px; background: #fff; }
+  .feature .ico { width: 40px; height: 40px; border-radius: 10px; background: var(--blue-soft); color: var(--blue); display: grid; place-items: center; font-weight: 700; margin-bottom: 14px; }
+  .feature h3 { margin: 0 0 8px; font-size: 19px; }
+  .feature p { margin: 0; color: var(--muted); font-size: 15.5px; }
+
+  .steps { counter-reset: s; display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; margin-bottom: 36px; }
+  .step { position: relative; padding: 26px; border-radius: var(--radius); background: #fff; border: 1px solid var(--line); }
+  .step::before { counter-increment: s; content: counter(s); display: grid; place-items: center; width: 32px; height: 32px; border-radius: 50%; background: var(--navy); color: #fff; font-weight: 700; font-size: 15px; margin-bottom: 12px; }
+  .step h3 { margin: 0 0 6px; font-size: 18px; }
+  .step p { margin: 0; color: var(--muted); font-size: 15px; }
+  .ai-note { background: var(--blue-soft); border-radius: var(--radius); padding: 20px 24px; font-size: 15.5px; }
+
+  .trust { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px 40px; padding: 0; margin: 0; list-style: none; }
+  .trust li { padding-left: 30px; position: relative; font-size: 16px; }
+  .trust li::before { content: ""; position: absolute; left: 0; top: 6px; width: 16px; height: 16px; border-radius: 50%; background: var(--blue); box-shadow: inset 0 0 0 4px var(--blue-soft); }
+
+  .team p { font-size: 17px; max-width: 760px; color: var(--ink); }
+
+  /* Pilot form */
+  .pilot { background: linear-gradient(160deg, var(--navy) 0%, var(--navy-2) 100%); color: #fff; }
+  .pilot .wrap { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 56px; align-items: start; }
+  .pilot h2 { color: #fff; }
+  .pilot .section-lead { color: #c9d7ee; }
+  .pilot ul { padding-left: 20px; color: #c9d7ee; margin: 0; }
+  .pilot ul li { margin-bottom: 8px; }
+  form { background: #fff; color: var(--ink); border-radius: var(--radius); padding: 28px; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  form .full { grid-column: 1 / -1; }
+  label { display: block; font-size: 13.5px; font-weight: 600; margin-bottom: 6px; }
+  input, select, textarea { width: 100%; font: inherit; font-size: 15px; padding: 11px 12px; border: 1px solid var(--line); border-radius: 9px; background: #fff; color: var(--ink); }
+  input:focus, select:focus, textarea:focus { outline: 2px solid var(--blue); outline-offset: 0; border-color: var(--blue); }
+  textarea { min-height: 90px; resize: vertical; }
+  button { font: inherit; font-weight: 600; font-size: 16px; padding: 14px 20px; border: 0; border-radius: 10px; background: var(--blue); color: #fff; cursor: pointer; }
+  button:hover { background: #1d4fd8; }
+  .fine { font-size: 12.5px; color: var(--muted); margin: 0; }
+  .hidden { display: none; }
+
+  footer { padding: 32px 0 44px; font-size: 13px; color: var(--muted); }
+  footer .wrap { display: flex; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+  footer ol { margin: 6px 0 0; padding-left: 18px; }
+
+  @media (max-width: 900px) {
+    .hero { padding: 112px 0 64px; }
+    .hero .wrap, .pilot .wrap { grid-template-columns: 1fr; gap: 40px; }
+    .hero h1 { font-size: 32px; }
+    .stats, .grid3, .steps { grid-template-columns: 1fr; }
+    .trust { grid-template-columns: 1fr; }
+    h2 { font-size: 27px; }
+    .problem blockquote { font-size: 18px; }
+    section { padding: 64px 0; }
+  }
+  @media (max-width: 560px) {
+    form { grid-template-columns: 1fr; padding: 22px; }
+    .nav-cta { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="#">Deep<span>Motiv</span></a>
+    <a class="nav-cta" href="#pilot">Request a pilot</a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <div>
+      <span class="eyebrow">For managers and the HR leaders behind them</span>
+      <h1>For each person on the team, DeepMotiv shows the manager what motivates them, how to act on it today, and when they are struggling.</h1>
+      <p class="lead">An AI platform that turns the science of human motivation into daily, person-by-person guidance for managers, with early warning when someone is struggling. Every employee is on it; managers use it daily.</p>
+      <div class="btns">
+        <a class="btn btn-primary" href="#pilot">Request a pilot for one team</a>
+        <a class="btn btn-ghost" href="#how">See how it works</a>
+      </div>
+    </div>
+    <div>
+      <div class="card" aria-label="Illustration of a manager's view of one team member">
+        <div class="tag">Manager view · this week</div>
+        <div class="person">
+          <div class="avatar">S</div>
+          <div><b>Sara, Senior Analyst</b><small>On your team for 14 months</small></div>
+        </div>
+        <div class="block">
+          <div class="k">What motivates her</div>
+          <div class="chips"><span class="chip">Learning new things</span><span class="chip">Working independently</span><span class="chip">Being recognized for quality</span></div>
+        </div>
+        <div class="block">
+          <div class="k">How to act on it today</div>
+          Give her the new client analysis and let her own it end to end. Recognize the quality of the work by name, not just the delivery date.
+        </div>
+        <div class="flag">
+          <div class="k">Early warning</div>
+          Her check-in has dipped two weeks in a row. Suggested: a 10-minute one-to-one this week, starting with workload.
+        </div>
+      </div>
+      <div class="illus-note">Illustration</div>
+    </div>
+  </div>
+</section>
+
+<section class="problem alt">
+  <div class="wrap">
+    <h2>The problem</h2>
+    <blockquote>Managers lead their teams without knowing what motivates each person, and nobody can see when someone is struggling (stressed, burning out, or losing interest). People managed this way disengage, but they rarely resign: they stay and underperform, seven in ten employees in the UAE and eight in ten worldwide, a loss most organizations discover only from a survey a year later.</blockquote>
+    <div class="stats">
+      <div class="stat">
+        <div class="n">7 in 10</div>
+        <p>employees in the UAE are not engaged at work, even though the UAE leads the region.</p>
+        <small>Gallup, State of the Global Workplace 2026<sup>1</sup></small>
+      </div>
+      <div class="stat">
+        <div class="n">70%</div>
+        <p>or more of the difference in engagement between teams comes down to the manager.</p>
+        <small>Gallup, State of the American Manager<sup>2</sup></small>
+      </div>
+      <div class="stat">
+        <div class="n">54%</div>
+        <p>of GCC employees have been under constant strain at work, yet only 24% plan to leave.</p>
+        <small>EXE and Ipsos, GCC People Pulse Q2 2026<sup>3</sup></small>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2 style="margin-bottom:32px">What managers get</h2>
+    <div class="grid3">
+      <div class="feature">
+        <div class="ico">1</div>
+        <h3>What motivates each person</h3>
+        <p>A clear picture of what drives each member of the team, in plain language, not a score sheet.</p>
+      </div>
+      <div class="feature">
+        <div class="ico">2</div>
+        <h3>Guidance on everyday decisions</h3>
+        <p>Person-by-person advice on what to assign, how to brief, how to respond and how to support.</p>
+      </div>
+      <div class="feature">
+        <div class="ico">3</div>
+        <h3>Early warning</h3>
+        <p>A flag when someone is struggling, so the manager can act this week rather than after next year's survey.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="how" class="alt">
+  <div class="wrap">
+    <h2>How it works</h2>
+    <p class="section-lead">Every employee is on it. Managers use it daily. HR sees the aggregate.</p>
+    <div class="steps">
+      <div class="step">
+        <h3>A motivation profile</h3>
+        <p>Each employee completes a validated motivation profile once. They see their own results and guidance.</p>
+      </div>
+      <div class="step">
+        <h3>A two-tap weekly check-in</h3>
+        <p>A short check-in each week keeps the picture current and shows when something changes.</p>
+      </div>
+      <div class="step">
+        <h3>Guidance for the manager</h3>
+        <p>Managers get the team view: what motivates each person, what to do this week, and who needs attention.</p>
+      </div>
+    </div>
+    <div class="ai-note"><b>Where AI fits.</b> A certified rule base, built from years of consulting practice, decides the guidance. AI writes it in plain words. The model is swappable, including Arabic-native models.</div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>Built for trust</h2>
+    <p class="section-lead">Motivation data is personal. The platform is designed so organizations can answer employees' questions before they are asked.</p>
+    <ul class="trust">
+      <li>Employees opt in, and see their own profile and guidance.</li>
+      <li>Visibility settings let each organization decide what managers see.</li>
+      <li>HR sees team and organization trends, not individual check-ins.</li>
+      <li>The guidance comes from rules you can inspect, not from a black box.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="team alt">
+  <div class="wrap">
+    <h2>Who is behind it</h2>
+    <p>DeepMotiv is built by a team led by Dina Alashi and Hadi Fakhoury, with eight years of designing and delivering team and leadership programs for organizations across the UAE. Again and again, we saw managers who wanted to motivate their people and had no practical way to know what each person needed. DeepMotiv puts that knowledge in every manager's hands, every day.</p>
+    <p>Contact: <a href="mailto:dina@deepmotiv.com">dina@deepmotiv.com</a></p>
+  </div>
+</section>
+
+<section id="pilot" class="pilot">
+  <div class="wrap">
+    <div>
+      <h2>Request a pilot for one team</h2>
+      <p class="section-lead">We are starting with a small number of organizations in the UAE, Abu Dhabi first.</p>
+      <ul>
+        <li>One team of 5 to 15 people and their manager</li>
+        <li>We set it up with you and stay close through the pilot</li>
+        <li>No commitment beyond the pilot</li>
+      </ul>
+    </div>
+
+    <form name="pilot-request" method="POST" action="/thanks.html" data-netlify="true" netlify-honeypot="company-website">
+      <input type="hidden" name="form-name" value="pilot-request">
+      <input type="hidden" name="source" id="source" value="direct">
+      <p class="hidden"><label>Leave this empty <input name="company-website"></label></p>
+
+      <div><label for="name">Full name</label><input id="name" name="name" required autocomplete="name"></div>
+      <div><label for="email">Work email</label><input id="email" name="email" type="email" required autocomplete="email"></div>
+      <div><label for="organization">Organization</label><input id="organization" name="organization" required autocomplete="organization"></div>
+      <div><label for="role">Your role</label><input id="role" name="role" required placeholder="e.g. HR Director, Head of Operations"></div>
+      <div>
+        <label for="org_size">Organization size</label>
+        <select id="org_size" name="org_size" required>
+          <option value="">Select</option>
+          <option>Under 200</option>
+          <option>200 to 499</option>
+          <option>500 to 1,999</option>
+          <option>2,000 to 9,999</option>
+          <option>10,000 or more</option>
+        </select>
+      </div>
+      <div>
+        <label for="interest">I am mainly interested as</label>
+        <select id="interest" name="interest" required>
+          <option value="">Select</option>
+          <option>HR or people leader</option>
+          <option>Division or business head</option>
+          <option>Manager of a team</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="full"><label for="message">What would you want it to help with? (optional)</label><textarea id="message" name="message"></textarea></div>
+      <div class="full"><button type="submit">Request a pilot</button></div>
+      <p class="fine full">We will reply within two working days. Your details are used only to discuss a pilot.</p>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div>&copy; 2026 DeepMotiv · Abu Dhabi · <a href="mailto:dina@deepmotiv.com">dina@deepmotiv.com</a></div>
+    <div>
+      Sources
+      <ol>
+        <li><a href="https://www.gallup.com/workplace/707522/state-global-workplace-united-arab-emirates-country-level-data.aspx" target="_blank" rel="noopener">Gallup, State of the Global Workplace 2026, UAE data</a></li>
+        <li><a href="https://news.gallup.com/businessjournal/182792/managers-account-variance.aspx" target="_blank" rel="noopener">Gallup, State of the American Manager (2015)</a></li>
+        <li><a href="https://www.khaleejtimes.com/business/more-than-half-of-gcc-workers-feel-burnt-out-despite-high-confidence-in-employers-survey-finds" target="_blank" rel="noopener">EXE and Ipsos, GCC People Pulse Q2 2026</a></li>
+      </ol>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Records which channel sent the visitor: add ?src=linkedin (or utm_source=...) to links you share.
+  try {
+    var p = new URLSearchParams(window.location.search);
+    var s = p.get('src') || p.get('utm_source');
+    if (s) { document.getElementById('source').value = s.slice(0, 60); }
+  } catch (e) {}
+</script>
+</body>
+</html>
