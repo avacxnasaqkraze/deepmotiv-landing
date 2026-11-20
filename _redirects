@@ -1,0 +1,6 @@
+# One page, several addresses: each channel gets its own path so views can be counted per channel.
+/dm     /index.html  200
+/li     /index.html  200
+/dfhq   /index.html  200
+/email  /index.html  200
+/wa     /index.html  200

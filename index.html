@@ -344,10 +344,13 @@
 </footer>
 
 <script>
-  // Records which channel sent the visitor: add ?src=linkedin (or utm_source=...) to links you share.
+  // Records which channel sent the visitor: share a channel address (/dm, /li, /dfhq, /email, /wa)
+  // or add ?src=linkedin (or utm_source=...) to a link.
   try {
     var p = new URLSearchParams(window.location.search);
-    var s = p.get('src') || p.get('utm_source');
+    var channels = { dm: 'dm', li: 'linkedin', dfhq: 'dfhq', email: 'email', wa: 'whatsapp' };
+    var path = window.location.pathname.replace(/^\/+|\/+$/g, '').toLowerCase();
+    var s = p.get('src') || p.get('utm_source') || channels[path];
     if (s) { document.getElementById('source').value = s.slice(0, 60); }
   } catch (e) {}
 </script>
